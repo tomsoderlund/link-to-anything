@@ -8,9 +8,11 @@ Link to any search phrase – like Google’s “I’m lucky” feature.
 
 ## Usage
 
+Set `BING_API_KEY` in an `.env` file.
+
     yarn dev
 
-Examples
+Examples:
 
 - Redirect (302): http://localhost:3038/?q=What is love?
 - Get JSON: http://localhost:3038/?json=true&q=What is love?
