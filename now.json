@@ -1,12 +1,23 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "app/link.js", "use": "@now/node", "config": {} }
+  "version":2,
+  "builds":[
+    {
+      "src":"app/link.js",
+      "use":"@now/node",
+      "config":{
+      }
+    }
   ],
-  "routes": [
-    { "src": "/?", "dest": "/app/link.js" }
+  "routes":[
+    {
+      "src":"/?",
+      "dest":"/app/link.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
   ],
-  "env": {
-    "NODE_ENV": "production"
+  "env":{
+    "NODE_ENV":"production"
   }
 }
