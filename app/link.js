@@ -7,14 +7,18 @@
 const { parseRequestQuery } = require('./helpers')
 const searchBing = require('./searchBing')
 
+const includesSome = (parentObj, childObjects) => childObjects.filter(childObj => parentObj.includes(childObj))
+
 const getUrlsForQuery = async function (searchText, options) {
   const results = await searchBing(searchText, options)
-  const allUrls = results.webPages.value.map(webpage => webpage.url)
-  return [allUrls, results.webPages.value]
+  const allSites = results.webPages.value.filter(webpage => options.remove ? !includesSome(webpage.url, options.remove.split(',')).length : true)
+  const allUrls = allSites.map(webpage => webpage.url)
+  return [allUrls, allSites]
 }
 
 const serveJSON = async function (req, res) {
   const query = parseRequestQuery(req.url)
+  if (!query.q) throw new Error(`No query (q=) defined.`)
   const searchText = decodeURIComponent(query.q)
   const [allUrls, allWebsites] = await getUrlsForQuery(searchText, query)
   res.setHeader('Content-Type', 'application/json')
@@ -29,6 +33,7 @@ const serveJSON = async function (req, res) {
 
 const redirectToUrl = async function (req, res) {
   const query = parseRequestQuery(req.url)
+  if (!query.q) throw new Error(`No query (q=) defined.`)
   const searchText = decodeURIComponent(query.q)
   const [allUrls] = await getUrlsForQuery(searchText, query)
   res.writeHead(302, { 'Location': allUrls[0] })

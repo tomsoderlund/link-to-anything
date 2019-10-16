@@ -1,7 +1,7 @@
 {
   "name": "link-to-anything",
-  "version": "1.0.0",
-  "description": "Link to any search word – like Google’s “I’m lucky” feature.",
+  "version": "1.1.0",
+  "description": "Link to any search phrase – like Google’s “I’m lucky” feature.",
   "author": "Weld (www.weld.io)",
   "license": "MIT",
   "main": "app/server.js",
