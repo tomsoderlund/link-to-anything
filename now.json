@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "app/link.js", "use": "@now/node", "config": {} }
+  ],
+  "routes": [
+    { "src": "/?", "dest": "/app/link.js" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
