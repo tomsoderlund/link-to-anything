@@ -14,10 +14,10 @@ Set `BING_API_KEY` in an `.env` file.
 
 Examples:
 
-- Redirect (302): http://localhost:3038/?q=What+is+love?
-- Get JSON: http://localhost:3038/?json=true&q=What+is+love?
-- Remove domains: http://localhost:3038/?remove=youtube,wikipedia&json=true&q=What+is+love?
-- Locale: http://localhost:3038/?locale=sv-SE&json=true&q=What+is+love?
+- Redirect (302): http://localhost:3038/?q=What+is+love
+- Get JSON: http://localhost:3038/?json=true&q=What+is+love
+- Remove domains: http://localhost:3038/?remove=youtube,wikipedia&json=true&q=What+is+love
+- Locale: http://localhost:3038/?locale=sv-SE&json=true&q=What+is+love
 
 
 ## Deploy on Zeit Now
