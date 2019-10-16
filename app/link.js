@@ -1,40 +1,48 @@
 //
-// Name:    page.js
-// Purpose: Controller and routing for full page text
+// Name:    link.js
+// Purpose: Controller for parsing links
 // Creator: Tom Söderlund
 //
 
-const fs = require('fs')
-const { parseRequestParams, parseRequestQuery } = require('./helpers')
+const { parseRequestQuery } = require('./helpers')
 const searchBing = require('./searchBing')
 
-const getUrlsForQuery = async function (query) {
-  const results = await searchBing(query)
+const getUrlsForQuery = async function (searchText, options) {
+  const results = await searchBing(searchText, options)
   const allUrls = results.webPages.value.map(webpage => webpage.url)
-  return allUrls
+  return [allUrls, results.webPages.value]
 }
 
 const serveJSON = async function (req, res) {
   const query = parseRequestQuery(req.url)
-  const searchQuery = decodeURIComponent(query.q)
-  const allUrls = await getUrlsForQuery(searchQuery)
+  const searchText = decodeURIComponent(query.q)
+  const [allUrls, allWebsites] = await getUrlsForQuery(searchText, query)
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify({
-    query: searchQuery,
+    query: searchText,
     url: allUrls[0],
+    name: allWebsites[0].name,
+    snippet: allWebsites[0].snippet,
     'all_urls': allUrls
   }))
 }
 
 const redirectToUrl = async function (req, res) {
   const query = parseRequestQuery(req.url)
-  const searchQuery = decodeURIComponent(query.q)
-  const allUrls = await getUrlsForQuery(searchQuery)
+  const searchText = decodeURIComponent(query.q)
+  const [allUrls] = await getUrlsForQuery(searchText, query)
   res.writeHead(302, { 'Location': allUrls[0] })
   res.end()
 }
 
-const serveError = function (err, res) {
+const serve404 = function (req, res) {
+  const message = `Not found: ${req.url}`
+  res.statusCode = 404
+  res.statusMessage = message
+  res.end(message)
+}
+
+const serve500 = function (err, res) {
   console.error(err.message)
   res.statusCode = 500
   res.statusMessage = err.message
@@ -44,13 +52,17 @@ const serveError = function (err, res) {
 const router = async function (req, res) {
   try {
     const { url } = req
-    if (url.includes('json=true')) {
-      serveJSON(req, res)
+    console.log(`Incoming:`, url)
+    if (url.includes('/favicon.ico')) {
+      // favicon.ico always requested by browser
+      await serve404(req, res)
+    } else if (url.includes('json=true')) {
+      await serveJSON(req, res)
     } else {
-      redirectToUrl(req, res)
+      await redirectToUrl(req, res)
     }
   } catch (err) {
-    serveError(err, res)
+    serve500(err, res)
   }
 }
 
