@@ -12,6 +12,13 @@ Set `BING_API_KEY` in an `.env` file.
 
     yarn dev
 
+Parameters:
+
+- `q` (required): search query
+- `json`: return JSON instead of redirect
+- `remove`: comma-separated list of strings to remove
+- `locale`: e.g. "sv-SE"
+
 Examples:
 
 - Redirect (302): http://localhost:3038/?q=What+is+love
