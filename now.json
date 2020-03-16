@@ -18,6 +18,7 @@
     }
   ],
   "env":{
-    "NODE_ENV":"production"
+    "NODE_ENV":"production",
+    "BING_API_KEY":"@bing_api_key"
   }
 }
